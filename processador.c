@@ -1,15 +1,31 @@
 #include <stdlib.h>
 #include <stddio.h>
 #include <math.h>
+/*
+UFC - Ciências da Computação
+Trabalho de Arquitetura de Computadores
+Baseado no Processador Teórico mostrado no livro "Organização Estruturada de Computadores - Tanenbaum" 
+Autor: WandsonSantos
+*/
 
+
+//Definindo uma word(palavra) de 32bits, utilizando unsigned para ter acesso ao 32º bit;
 typedef unsigned int word;
+
+
+//Definindo um byte utilizando char, pois o char possui 8bits, e unsigned para ter acesso ao 8º bit;
 typedef unsigned char byte;
 
+//Definindo os Registradores;
 word mar,mdr,pc,sp,lv,cpp,tos,opc,h,bB,bC;
 byte mbr;
 
+
+/*Método de leitura dos Registradores de maneira que somente 1 resgistrador
+  pode ser lido por vez.*/
 void ler_registrador(byte ender)
 {
+	//Ender é um byte logo é suficiente para endereçar os 8 registradores
 	switch(ender)
 	{
 		case 1: bB = mdr; break;
