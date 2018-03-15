@@ -34,7 +34,7 @@ void ler_registrador(byte ender)
 		case 4: 
 		{
 			sinal = ender >> 7;
-			bB = (sinal)? 0xFFFFFF00:0;
+			bB = (sinal) ? 0xFFFFFF00 : 0;
 			bB = bB|mbr;
 		}                 break;
 		case 5: bB = sp;  break;
