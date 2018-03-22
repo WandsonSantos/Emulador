@@ -17,10 +17,12 @@ typedef unsigned int word;
 //Definindo um byte utilizando char, pois o char possui 8bits, e unsigned para ter acesso ao 8ï¿½ bit;
 typedef unsigned char byte;
 
+typedef unsigned long int microinstruction;
+
 //Definindo os Registradores;
 word mar,mdr,pc,sp,lv,cpp,tos,opc,h,bA,bB,bC;
 byte mbr,Z,N;
-word firmware[10];
+microinstruction firmware[512];
 
 /*Mï¿½todo de leitura dos Registradores de maneira que somente 1 resgistrador
   pode ser lido por vez.*/
@@ -51,7 +53,7 @@ void ler_registrador(byte ender)
 
 void debug()
 {
-	system("cls");
+	system("clear");
 	printf("---Registradores---\n");
 	printf("MAR: %d\n",mar);
 	printf("MDR: %d\n",mdr);
@@ -129,32 +131,35 @@ void alu(byte operacao)
 int main()
 {
 	byte mpc = 0,reg_end_lei,op_alu;
-	word mi,reg_end_grav;
+	word reg_end_grav,addr;
+	microinstruction mi;
 
 
-	firmware[0] = 0b001100010000010000000;
-	firmware[1] = 0b001101010000010000100;
-	firmware[2] = 0b001101010000010000100;
-	firmware[3] = 0b001101010000010000100;
-	firmware[4] = 0b001101010000010000100;
+	firmware[0] = 0b000000001000001100010000010000000000;
+	firmware[1] = 0b000000010000001101010000010000000100;
+	firmware[2] = 0b000000011000001101010000010000000100;
+	firmware[3] = 0b000000100000001101010000010000000100;
+	firmware[4] = 0b000000000000001101010000010000000100;
 
 
 	while(true)
 	{
-		reg_end_lei = (firmware[mpc] << 28) >> 28;
+		mi = firmware[mpc];
+		reg_end_lei = (mi << 32) >> 32;
 		ler_registrador(reg_end_lei);
 
 
-		op_alu = firmware[mpc]>>13;
+		op_alu = ( mi<<12 ) >>28;
 		alu(op_alu);
 
-		reg_end_grav =(firmware[mpc] << 19) >> 23;
+		reg_end_grav =(mi << 20) >> 27;
 		gravar_registrador(reg_end_grav);
 
 		debug();
 		getchar();
-		mpc++;
-		if(mpc == 10) mpc = 0;
+		
+		addr = mi >> 27;
+		mpc = addr;
 	}
 
 }
