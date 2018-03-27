@@ -56,7 +56,7 @@ void ler_registrador(byte ender)
 
 void debug()
 {
-	system("cls");
+	system("clear");
 	printf("---Registradores---\n");
 	printf("MAR: %d\n",mar);
 	printf("MDR: %d\n",mdr);
@@ -155,27 +155,27 @@ int main()
 	while(true)
 	{
 		mi = firmware[mpc];
-		reg_end_lei = (mi << 32) >> 32;
+		reg_end_lei = (mi << 60) >> 60;
 		ler_registrador(reg_end_lei);
 
-		op_alu = (mi << 12) >> 28;
+		op_alu = (mi << 40) >> 56;
 		alu(op_alu);
 		
 
-		reg_end_grav = (mi << 20) >> 27;
+		reg_end_grav = (mi << 48) >> 55;
 		gravar_registrador(reg_end_grav);
 
 		debug();
 		addr = mi >> 27;
-		jmp = ((mi << 9) >> 33);
+		jmp = ((mi << 37) >> 61);
 		mpc = next_address(addr, jmp);
 				
-		printf("lei %d\n",reg_end_lei);
+		/*printf("lei %d\n",reg_end_lei);
 		printf("opalu %d\n",alu);
 		printf("addr %d\n",addr);
 		printf("jmp %d\n",jmp);
 		printf("mpc %d\n",mpc);
-		printf("grav %d\n",reg_end_grav);
+		printf("grav %d\n",reg_end_grav);*/
 	
 		getchar();
 	}
