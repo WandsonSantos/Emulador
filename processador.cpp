@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_MEM 16777216
 /*
@@ -138,9 +139,16 @@ word next_address(word next,byte jmp)
 	if(jmp & 4) return next | mbr;
 }
 
+void memory(byte mem)
+{
+	if(mem & 1)	mbr = ram[pc];
+	if(mem & 2) memcpy(&mdr,&mem[mar*4],4);
+	if(mem & 4) memcpy(&mem[mar*4],&mdr,4);
+}
+
 int main()
 {
-	byte mpc = 0,reg_end_lei,op_alu,jmp;
+	byte mpc = 0,reg_end_lei,op_alu,jmp,mem;
 	word reg_end_grav,addr;
 	microinstruction mi;
 	
@@ -154,6 +162,9 @@ int main()
 	op_alu = 0;
 	while(true)
 	{
+		mem = (mi << 57) >> 61;
+		memory(mem);
+		
 		mi = firmware[mpc];
 		reg_end_lei = (mi << 60) >> 60;
 		ler_registrador(reg_end_lei);
