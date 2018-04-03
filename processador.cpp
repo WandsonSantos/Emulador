@@ -141,9 +141,10 @@ word next_address(word next,byte jmp)
 
 void memory(byte mem)
 {
+
 	if(mem & 1)	mbr = ram[pc];
-	if(mem & 2) memcpy(&mdr,&mem[mar*4],4);
-	if(mem & 4) memcpy(&mem[mar*4],&mdr,4);
+	if(mem & 2) memcpy(&mdr,&ram[mar*4],4);
+	if(mem & 4) memcpy(&ram[mar*4],&mdr,4);
 }
 
 int main()
@@ -162,6 +163,8 @@ int main()
 	op_alu = 0;
 	while(true)
 	{
+		debug();
+
 		mem = (mi << 57) >> 61;
 		memory(mem);
 		
@@ -176,17 +179,9 @@ int main()
 		reg_end_grav = (mi << 48) >> 55;
 		gravar_registrador(reg_end_grav);
 
-		debug();
 		addr = mi >> 27;
 		jmp = ((mi << 37) >> 61);
 		mpc = next_address(addr, jmp);
-				
-		/*printf("lei %d\n",reg_end_lei);
-		printf("opalu %d\n",alu);
-		printf("addr %d\n",addr);
-		printf("jmp %d\n",jmp);
-		printf("mpc %d\n",mpc);
-		printf("grav %d\n",reg_end_grav);*/
 	
 		getchar();
 	}
