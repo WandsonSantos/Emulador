@@ -108,7 +108,7 @@ void alu(byte operacao)
 		case 60: bC = bA + bB    ; break;
 		case 61: bC = bA + bB + 1; break;
 		case 63: bC = bB - bA    ; break;
-		default:				   break;
+		default:		   break;
 	}
 
 	if(bC == 0){
@@ -133,16 +133,16 @@ void alu(byte operacao)
 
 word next_address(word next,byte jmp)
 {
-	if(jmp == 0) return next;
-	if(jmp & 1) return next | (z << 8);
-	if(jmp & 2) return next | (n << 8);
-	if(jmp & 4) return next | mbr;
+	if(jmp == 0) return next           ;
+	if(jmp & 1)  return next | (z << 8);
+	if(jmp & 2)  return next | (n << 8);
+	if(jmp & 4)  return next | mbr	   ;
 }
 
 void memory(byte mem)
 {
 
-	if(mem & 1)	mbr = ram[pc];
+	if(mem & 1) mbr = ram[pc]	      ;
 	if(mem & 2) memcpy(&mdr,&ram[mar*4],4);
 	if(mem & 4) memcpy(&ram[mar*4],&mdr,4);
 }
@@ -165,9 +165,6 @@ int main()
 	{
 		debug();
 
-		mem = (mi << 57) >> 61;
-		memory(mem);
-		
 		mi = firmware[mpc];
 		reg_end_lei = (mi << 60) >> 60;
 		ler_registrador(reg_end_lei);
@@ -175,9 +172,11 @@ int main()
 		op_alu = (mi << 40) >> 56;
 		alu(op_alu);
 		
-
 		reg_end_grav = (mi << 48) >> 55;
 		gravar_registrador(reg_end_grav);
+		
+		mem = (mi << 57) >> 61;
+		memory(mem);
 
 		addr = mi >> 27;
 		jmp = ((mi << 37) >> 61);
