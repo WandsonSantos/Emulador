@@ -174,13 +174,13 @@ int main()
 		
 		reg_end_grav = (mi << 48) >> 55;
 		gravar_registrador(reg_end_grav);
-		
-		mem = (mi << 57) >> 61;
-		memory(mem);
 
 		addr = mi >> 27;
 		jmp = ((mi << 37) >> 61);
 		mpc = next_address(addr, jmp);
+		
+		mem = (mi << 57) >> 61;
+		memory(mem);
 	
 		getchar();
 	}
